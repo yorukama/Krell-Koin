@@ -40,7 +40,7 @@ export const loadAccount = async (web3, dispatch) => {
 
 export const loadToken = async (web3, networkId, dispatch) => {
   try {
-    const token = web3.eth.Contract(Token.abi, Token.networks[networkId].address)
+    const token = new web3.eth.Contract(Token.abi, Token.networks[networkId].address)
     dispatch(tokenLoaded(token))
     return token
   } catch (error) {
@@ -51,7 +51,7 @@ export const loadToken = async (web3, networkId, dispatch) => {
 
 export const loadExchange = async (web3, networkId, dispatch) => {
   try {
-    const exchange = web3.eth.Contract(Exchange.abi, Exchange.networks[networkId].address)
+    const exchange = new web3.eth.Contract(Exchange.abi, Exchange.networks[networkId].address)
     dispatch(exchangeLoaded(exchange))
     return exchange
   } catch (error) {
@@ -149,7 +149,7 @@ export const loadBalances = async (dispatch, web3, exchange, token, account) => 
 }
 
 export const depositEther = (dispatch, exchange, web3, amount, account) => {
-  exchange.methods.depositEther.send({ from: account,  value: web3.utils.toWei(amount, 'ether') })
+  exchange.methods.depositEther().send({ from: account,  value: web3.utils.toWei(amount, 'ether') })
   .on('transactionHash', (hash) => {
     dispatch(balancesLoading())
   })
